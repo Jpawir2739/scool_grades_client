@@ -76,6 +76,10 @@ public class SecurityConfig {
                     "/swagger-resources/**",
                     "/webjars/**"
                 ).permitAll()
+                // Журнал оценок и справочники для формы — без JWT
+                .requestMatchers("/api/grades", "/api/grades/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/students", "/api/students/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/subjects", "/api/subjects/**").permitAll()
                 // Только ADMIN может регистрировать новых пользователей
                 .requestMatchers(HttpMethod.POST, "/api/auth/register").hasAuthority("ROLE_ADMIN")
                 // Всё остальное — только аутентифицированным
