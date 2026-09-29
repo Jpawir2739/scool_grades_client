@@ -7,6 +7,8 @@ import {
   fetchSubjects,
   updateGrade,
 } from './api'
+import { isLoggedIn, logout } from './auth'
+import Login from './Login'
 import './App.css'
 
 const emptyForm = () => ({
@@ -27,7 +29,7 @@ function toPayload(form) {
   }
 }
 
-export default function App() {
+function GradesPage({ onLogout }) {
   const [grades, setGrades] = useState([])
   const [students, setStudents] = useState([])
   const [subjects, setSubjects] = useState([])
@@ -118,7 +120,15 @@ export default function App() {
 
   return (
     <main className="page">
-      <h1>Журнал оценок</h1>
+      <header className="header">
+        <h1>Журнал оценок</h1>
+        <button
+          type="button"
+          onClick={onLogout}
+        >
+          Выйти
+        </button>
+      </header>
 
       {error ? <p className="error">{error}</p> : null}
 
@@ -200,4 +210,17 @@ export default function App() {
       </table>
     </main>
   )
+}
+
+export default function App() {
+  const [authorized, setAuthorized] = useState(() => isLoggedIn())
+
+  if (!authorized) {
+    return <Login onSuccess={() => setAuthorized(true)} />
+  }
+
+  return <GradesPage onLogout={() => {
+    logout()
+    setAuthorized(false)
+  }} />
 }
