@@ -118,6 +118,18 @@ function GradesPage({ onLogout }) {
     })
   }
 
+  function onShowAll() {
+    setError('')
+    setLoading(true)
+    fetchGrades()
+      .then((rows) => {
+        setGrades(rows)
+        setSelectedId(null)
+      })
+      .catch((err) => setError(err.message || 'Не удалось загрузить отметки'))
+      .finally(() => setLoading(false))
+  }
+
   return (
     <main className="page">
       <header className="header">
@@ -175,6 +187,7 @@ function GradesPage({ onLogout }) {
           <button type="button" onClick={onAdd}>Добавить</button>
           <button type="button" onClick={onUpdate}>Обновить</button>
           <button type="button" onClick={onDelete}>Удалить</button>
+          <button type="button" onClick={onShowAll}>Все отметки</button>
         </div>
       </form>
 

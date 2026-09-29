@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 
 /**
  * Наполняет базу данных начальными данными при первом запуске.
@@ -19,7 +18,7 @@ import java.util.List;
  *   admin   / admin123   — ROLE_ADMIN
  *   teacher / teacher123 — ROLE_TEACHER
  *
- * Тестовые данные: 2 класса, 6 учеников, 4 предмета, ~20 оценок.
+ * Тестовые данные: 3 класса, 9 учеников, 4 предмета, 34 оценки.
  * Повторный запуск безопасен — данные создаются только если их ещё нет.
  */
 @Slf4j
@@ -48,6 +47,7 @@ public class DataInitializer implements CommandLineRunner {
         }
 
         // ── Классы ────────────────────────────────────────────────────────────
+        SchoolClass class8v  = saveClass("8В",  2024);
         SchoolClass class9a  = saveClass("9А",  2024);
         SchoolClass class10b = saveClass("10Б", 2024);
 
@@ -66,6 +66,11 @@ public class DataInitializer implements CommandLineRunner {
         Student kozlova  = saveStudent("Анна",      "Козлова",  LocalDate.of(2008, 1, 30), class10b);
         Student novikov  = saveStudent("Сергей",    "Новиков",  LocalDate.of(2008, 6, 18), class10b);
         Student morozova = saveStudent("Екатерина", "Морозова", LocalDate.of(2008, 9, 12), class10b);
+
+        // ── Ученики 8В ────────────────────────────────────────────────────────
+        Student sokolov  = saveStudent("Павел",  "Соколов",  LocalDate.of(2010, 2, 14), class8v);
+        Student volkova  = saveStudent("Ольга",  "Волкова",  LocalDate.of(2010, 5, 9),  class8v);
+        Student orlov    = saveStudent("Никита", "Орлов",    LocalDate.of(2010, 12, 1), class8v);
 
         // ── Оценки ────────────────────────────────────────────────────────────
         // Иванов
@@ -98,8 +103,27 @@ public class DataInitializer implements CommandLineRunner {
         saveGrade(morozova, math,    teacher, 4, LocalDate.of(2024, 9, 12), null);
         saveGrade(morozova, history, teacher, 5, LocalDate.of(2024, 10, 7), "Отлично");
         saveGrade(morozova, russian, teacher, 5, LocalDate.of(2024, 10, 3), null);
+        saveGrade(morozova, physics, teacher, 4, LocalDate.of(2024, 10, 15), null);
 
-        log.info("Test data seeded: 2 classes, 6 students, 4 subjects, 20 grades.");
+        // Недостающие предметы у остальных учеников
+        saveGrade(ivanov,   history, teacher, 4, LocalDate.of(2024, 10, 8), null);
+        saveGrade(smirnova, russian, teacher, 5, LocalDate.of(2024, 10, 11), "Грамотная работа");
+        saveGrade(petrov,   physics, teacher, 3, LocalDate.of(2024, 10, 14), null);
+        saveGrade(kozlova,  russian, teacher, 5, LocalDate.of(2024, 10, 16), null);
+        saveGrade(novikov,  history, teacher, 3, LocalDate.of(2024, 10, 18), null);
+
+        // 8В
+        saveGrade(sokolov, math,    teacher, 4, LocalDate.of(2024, 9, 16), null);
+        saveGrade(sokolov, physics, teacher, 4, LocalDate.of(2024, 9, 27), "Старается");
+        saveGrade(sokolov, russian, teacher, 3, LocalDate.of(2024, 10, 4), null);
+        saveGrade(volkova, math,    teacher, 5, LocalDate.of(2024, 9, 16), "Отлично");
+        saveGrade(volkova, history, teacher, 5, LocalDate.of(2024, 10, 9), null);
+        saveGrade(volkova, russian, teacher, 4, LocalDate.of(2024, 10, 21), null);
+        saveGrade(orlov,   physics, teacher, 2, LocalDate.of(2024, 9, 27), "Пропуск лабораторной");
+        saveGrade(orlov,   history, teacher, 4, LocalDate.of(2024, 10, 9), null);
+        saveGrade(orlov,   math,    teacher, 3, LocalDate.of(2024, 10, 23), null);
+
+        log.info("Test data seeded: 3 classes, 9 students, 4 subjects, 34 grades.");
     }
 
     // ── Вспомогательные методы ────────────────────────────────────────────────
