@@ -1,28 +1,26 @@
 import { useState } from 'react'
-import { login, takeNotice } from './auth'
+import { register } from './auth'
 import { Link } from './router.jsx'
 import './App.css'
 
-export default function Login({ onSuccess }) {
+export default function Register({ onSuccess }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const [notice] = useState(() => takeNotice())
 
   function onSubmit(event) {
     event.preventDefault()
-    if (login(username, password)) {
-      setError('')
-      onSuccess()
+    const message = register(username, password)
+    if (message) {
+      setError(message)
       return
     }
-    setError('Неверный логин или пароль')
+    onSuccess()
   }
 
   return (
     <form className="login" onSubmit={onSubmit}>
-      <h1>Вход</h1>
-      {notice ? <p className="notice">{notice}</p> : null}
+      <h1>Регистрация</h1>
       {error ? <p className="error">{error}</p> : null}
       <label>
         Логин
@@ -40,12 +38,12 @@ export default function Login({ onSuccess }) {
           type="password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          autoComplete="current-password"
+          autoComplete="new-password"
         />
       </label>
-      <button type="submit">Войти</button>
+      <button type="submit">Создать аккаунт</button>
       <p className="hint">
-        Нет аккаунта? <Link to="/register">Регистрация</Link>
+        Уже есть аккаунт? <Link to="/login">Вход</Link>
       </p>
     </form>
   )

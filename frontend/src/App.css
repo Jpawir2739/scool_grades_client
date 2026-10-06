@@ -44,6 +44,16 @@ h1 {
   color: #9b1c1c;
 }
 
+.notice {
+  margin: 0;
+  color: #176b3a;
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
 .form {
   display: flex;
   flex-wrap: wrap;
